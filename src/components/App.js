@@ -1,7 +1,7 @@
 import "../styles/App.scss";
 
 
-import dataApi from '../services/api';
+
 import { useState } from "react";
 import logo from '../images/logo-adalab.png';
 import Header from "./Header/Header";
@@ -38,84 +38,23 @@ function App() {
   const [info, setInfo] = useState('');
   const [card, setCard] = useState('');
 
-  const handleInput = (ev) => {
-    const inputValue = ev.target.value;
-    const inputName = ev.target.name;
-    if (inputName === "name") {
-      setData({
-        ...data, name: inputValue
-      });
-    } else if (inputName === "slogan") {
-      setData({
-        ...data, slogan: inputValue
-      });
-    } else if (inputName === "repo") {
-      setData({
-        ...data, repo: inputValue
-      });
-    } else if (inputName === "demo") {
-      setData({
-        ...data, demo: inputValue
-      });
-    } else if (inputName === "technologies") {
-      setData({
-        ...data, technologies: inputValue
-      });
-    } else if (inputName === "desc") {
-      setData({
-        ...data, desc: inputValue
-      });
-    } else if (inputName === "autor") {
-      setData({
-        ...data, autor: inputValue
-      });
-    } else if (inputName === "job") {
-      setData({
-        ...data, job: inputValue
-      });
-    }
-  };
-
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-  }
-
-  const handleClickSend = (ev) => {
-    dataApi(data)
-      .then(info => {
-        console.log(info);
-        if (!info.success) {
-          if (info.error.includes('Mandatory fields:')) {
-            setCard('Todos los campos son obligatorios. Por favor, revise y cubra los campos restantes.');
-          } else if (info.error.includes('Database error: ER_DATA_TOO_LONG')) {
-            setCard('La foto es desmasiado grande debe ser de 200x200 px y menor a 120 KB, intente reducirla o use otra foto.');
-          } else if (info.error.includes('Database error: Database was shut down')) {
-            setCard('Ha ocurrido un error con el servidor, inténtelo de nuevo más tarde.');
-          } else {
-            setCard('Lo sentimos, ha ocurrido un error, inténtelo de nuevo más tarde.');
-          }
-        } else {
-          setUrl(info.cardURL)
-          setInfo(info)
-        }
-      })
-  }
-
-
-
 
   return (
     <div className="container">
       <Header></Header>
       <main className="main">
         <Preview data={data}></Preview>
-        <Form handleSubmit={handleSubmit} handleInput={handleInput}
-        data={data}
-        info={info} url={url}
-        card={card}
+        <Form
+          data={data}
+          info={info} url={url}
+          card={card}
+          setData={setData}
+          setCard={setCard}
+          setUrl={setUrl}
+          setInfo={setInfo}
         ></Form>
       </main>
-      <Footer logo = {logo}></Footer>
+      <Footer logo={logo}></Footer>
     </div>
   );
 }
